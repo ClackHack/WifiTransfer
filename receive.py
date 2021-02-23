@@ -1,5 +1,6 @@
 import socket,os
 def receive(path):
+
     sb = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sb.connect(("8.8.8.8", 80))
     ip = str(sb.getsockname()[0])
@@ -23,5 +24,5 @@ def receive(path):
         if ty=="TEXT":
             print(data.decode("utf-8"))
         else:
-            open(ty,"wb").write(data)
+            open(os.path.join(path,ty),"wb").write(data)
 
