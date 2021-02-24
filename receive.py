@@ -24,5 +24,6 @@ def receive(path):
         if ty=="TEXT":
             print(data.decode("utf-8"))
         else:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
             open(os.path.join(path,ty),"wb").write(data)
 
