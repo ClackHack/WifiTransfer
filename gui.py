@@ -72,10 +72,9 @@ class Send(tk.Frame):
         #temp = sys.stdout
         #sys.stdout=self
         
-        if os.path.isdir(self.folder.get()):
-            wsend.transfer(self.folder.get().replace('\\','/'),self.folder.get().replace('\\','/'),log=self.write)
-        else:
-            wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'),log=self.write)
+        
+        
+        wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'),log=self.write)
         #sys.stdout=temp
     def choose(self):
         if self.isfile.get()==1:
