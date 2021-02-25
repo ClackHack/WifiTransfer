@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog,messagebox
 import send as wsend
-import sys,os
+import sys,os,_thread
 import receive as wreceive
 MONOSPACES=("Consolas",11)
 class main(tk.Tk):
@@ -59,9 +59,11 @@ class Send(tk.Frame):
         self.isfile=tk.IntVar()
         tk.Button(self,text="Path",command=self.choose).grid(row=0,column=0,padx=5,pady=5)
         tk.Checkbutton(self,text="Single File",variable=self.isfile).grid(row=0,column=1,padx=5,pady=5)
-        tk.Button(self,text="Send",command=self.send).grid(row=1,column=1,padx=5,pady=5)
+        tk.Button(self,text="Send",command=self.sthread).grid(row=1,column=1,padx=5,pady=5)
         self.table = tk.Listbox(self,width=70,height=10,font=MONOSPACES,exportselection=False)
         self.table.grid(row=2,column=1,columnspan=4,padx=5,pady=5)
+    def sthread(self):
+        _thread.start_new_thread(self.send,())
     def send(self):
         self.table.delete(0,tk.END)
         if self.folder.get()=="Blank":

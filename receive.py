@@ -25,9 +25,9 @@ def receive(path,ip=None,log=None):
         data+=temp
     #print(data)
     d=data.split(SEPERATOR)
-    amount=int(d[0].strip(bytes("AMOUNT:",'utf-8')))
-    t=d[1].strip(bytes("FILES:",'utf-8')).split(SUBSEP)
-    raw=d[2].strip(bytes("DATA:",'utf-8')).split(SUBSEP)
+    amount=int(d[0].replace(bytes("AMOUNT:",'utf-8'),bytes("",'utf-8')))
+    t=d[1].replace(bytes("FILES:",'utf-8'),bytes("",'utf-8')).split(SUBSEP)
+    raw=d[2].replace(bytes("DATA:",'utf-8'),bytes("",'utf-8')).split(SUBSEP)
     for i in range(amount):
         if t[i] == bytes('RAW','utf-8'):
             log(raw[i].decode('utf-8'))
