@@ -1,5 +1,7 @@
 import socket,os
-def receive(path,ip=None):
+def receive(path,ip=None,log=None):
+    if not log:
+        log = print
     SEPERATOR=bytes('&*&*&*&*&*&*&','utf-8')
     SUBSEP=bytes('!@!@!@!@!@!@!','utf-8')
     sb = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,16 +30,16 @@ def receive(path,ip=None):
     raw=d[2].strip(bytes("DATA:",'utf-8')).split(SUBSEP)
     for i in range(amount):
         if t[i] == bytes('RAW','utf-8'):
-            print(raw[i].decode('utf-8'))
+            log(raw[i].decode('utf-8'))
         else:
             #print(t[i],raw[i])
             try:
                  os.makedirs(os.path.dirname(t[i]), exist_ok=True)
             except Exception as e:
-                print(e)
+                log(e)
             finally:
                 p=t[i].decode('utf-8')
-                print(f"Writing to {p}")
+                log(f"Writing to {p}")
                 open(p,'wb').write(raw[i])
                 
     '''print(amount)
