@@ -12,7 +12,7 @@ def receive(path,sip=None,log=None):
     if not sip:
         target = input("IP: ")
     else:
-        target = ip
+        target = sip
     port=5000
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((target, port))
