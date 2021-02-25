@@ -8,7 +8,7 @@ def receive(path,sip=None,log=None):
     sb.connect(("8.8.8.8", 80))
     ip = str(sb.getsockname()[0])
     sb.close()
-    print(bool(sip),type(sip),sip)
+    #print(bool(sip),type(sip),sip)
     if not sip:
         target = input("IP: ")
     else:
@@ -42,7 +42,7 @@ def receive(path,sip=None,log=None):
                 p=t[i].decode('utf-8')
                 log(f"Writing to {p}")
                 open(p,'wb').write(raw[i])
-                
+    log("All Files downloaded")            
     '''print(amount)
     amount=int(amount)
     print(f"Writing {amount} objects")
