@@ -1,38 +1,54 @@
 import socket,os
 
-def send(path,conn,base,raw=False):
-    ty=""
-    if not raw:
-        try:
-            data=open(path,"rb",encoding="utf-8").read()
-            ty=path.strip(base)
-        except:
-            print(f"Unable to read file {path}")
-            return
-    else:
-        ty="TEXT"
-        data = bytes(path,"utf-8")
-    conn.sendall(data)
-def transfer(path,base):
+def transfer(path,base,raw=False):
+    SEPERATOR="&*&*&*&*&*&*&"
+    SUBSEP="!@!@!@!@!@!@!"
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip = str(s.getsockname()[0])
     s.close()
     HOST = ip
     PORT=5000
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    s.bind((HOST,PORT))
     s.listen(1)
     print(f"Enter {HOST} on client to initiate transfer")
+    #print(path,base)
+    base=base.replace("\\",'/')
     conn,addr=s.accept()
-    if os.isdir(path):
+    
+    if raw:
+        print("Sending raw text")
+        conn.sendall(bytes("AMOUNT"+str(1),"utf-8"))
+        conn.sendall(bytes(SEPERATOR+"FILES:RAW","utf-8"))
+        conn.sendall(bytes(SEPERATOR+"DATA:"+path,"utf-8"))
+        #send(path,conn,base,raw=True)
+        return
+    full=os.path.join(base,path).replace("\\","/")
+    if os.path.isdir(path):
+        print("Base: ",base)
         paths = []
-        for p,d,f in os.walk(path):
-            paths.extend(f)
-        for i in paths:
-            conn.sendall(bytes(str(len(paths)),"utf-8"))
-            send(i,conn,base)
-    elif os.isfile(path):
-        conn.sendall(bytes(str(1), "utf-8"))
-        send(i,base,conn)
+        for p,d,f in os.walk(full):
+            #print(p,d,f)
+            for ff in f:
+                print(os.path.join(p,ff).replace("\\",'/'))
+                print(os.path.join(p,ff).replace("\\",'/').replace(base,""))
+                print("\n")
+            paths.extend([os.path.join(p,ff).replace("\\",'/') for ff in f])
+        print(paths)
+        conn.sendall(bytes("AMOUNT:"+str(len(paths)),"utf-8"))
+        conn.sendall(bytes(SEPERATOR+"FILES:"+SUBSEP.join([ff.replace(base,"").strip("/") for ff in paths]),"utf-8"))
+        conn.sendall(bytes(SEPERATOR+"DATA:","utf-8")+bytes(SUBSEP,"utf-8").join([open(i,"rb").read() for i in paths]))
+        #for i in paths:
+            
+            #send(i,conn,base)
+    #elif os.path.exists(full):
     else:
-        conn.sendall(bytes(str(1), "utf-8"))
-        send(path,conn,base,raw=True)
+        print("Sending File")
+        conn.sendall(bytes("AMOUNT"+str(1),"utf-8"))
+        conn.sendall(bytes(SEPERATOR+"FILES:"+path,"utf-8"))
+        conn.sendall(bytes(SEPERATOR+"DATA:","utf-8")+open(full,"rb").read())
+        #send(i,conn,base)
+    '''else:
+        print(path,full,os.path.isfile(full))'''
