@@ -8,7 +8,7 @@ def receive(path,sip=None,log=None):
     sb.connect(("8.8.8.8", 80))
     ip = str(sb.getsockname()[0])
     sb.close()
-    print(bool(ip),type(ip),ip)
+    print(bool(sip),type(sip),sip)
     if not sip:
         target = input("IP: ")
     else:

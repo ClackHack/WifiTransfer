@@ -99,9 +99,11 @@ class Receive(tk.Frame):
         tk.Button(self,text="Path",command=self.choose).grid(row=0,column=0,padx=5,pady=5)
         tk.Label(self,text="IP: ").grid(row=1,column=0,padx=5,pady=5)
         tk.Entry(self,textvariable=self.ip).grid(row=1,column=2,padx=5,pady=5)
-        tk.Button(self,text="Receive",command=self.receive).grid(row=2,column=0,padx=5,pady=5)
+        tk.Button(self,text="Receive",command=self.tr).grid(row=2,column=0,padx=5,pady=5)
         self.table = tk.Listbox(self,width=70,height=10,font=MONOSPACES,exportselection=False)
         self.table.grid(row=3,column=1,columnspan=4,padx=5,pady=5)
+    def tr(self):
+        _thread.start_new_thread(self.receive,())
     def receive(self):
         self.table.delete(0,tk.END)
         if self.folder.get()=="Blank":
