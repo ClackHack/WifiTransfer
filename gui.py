@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog,messagebox
 import send as wsend
-import sys
+import sys,os
 import receive as wreceive
 MONOSPACES=("Consolas",11)
 class main(tk.Tk):
@@ -71,9 +71,9 @@ class Send(tk.Frame):
         sys.stdout=self
         
         if os.path.isdir(self.folder.get()):
-            wsend.transfer(self.folder.get(),self.folder.get())
+            wsend.transfer(self.folder.get().replace('\\','/'),self.folder.get().replace('\\','/'))
         else:
-            wsend.transfer(self.folder.get(),os.path.dirname(self.folder.get()))
+            wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'))
         sys.stdout=temp
     def choose(self):
         if self.isfile.get()==1:
@@ -93,7 +93,7 @@ class Receive(tk.Frame):
         self.folder=tk.StringVar()
         self.folder.set("Blank")
         self.ip=tk.StringVar()
-        self.ip.set('Blank')
+        #self.ip.set('Blank')
         tk.Button(self,text="Path",command=self.choose).grid(row=0,column=0,padx=5,pady=5)
         tk.Label(self,text="IP: ").grid(row=1,column=0,padx=5,pady=5)
         tk.Entry(self,textvariable=self.ip).grid(row=1,column=2,padx=5,pady=5)
@@ -105,13 +105,13 @@ class Receive(tk.Frame):
         if self.folder.get()=="Blank":
             messagebox.showwarning("Error","No File Selected...")
             return
-        if self.ip.get()=="Blank":
+        if not self.ip.get():
             messagebox.showwarning("Error","No File Selected...")
             return
         temp = sys.stdout
         sys.stdout=self
         
-        wreceive.receive(self.folder.get(),ip=self.ip.get())
+        wreceive.receive(self.folder.get().replace("\\",'/'),ip=self.ip.get())
         sys.stdout=temp
     def choose(self):
 

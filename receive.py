@@ -1,12 +1,15 @@
 import socket,os
-def receive(path):
+def receive(path,ip=None):
     SEPERATOR=bytes('&*&*&*&*&*&*&','utf-8')
     SUBSEP=bytes('!@!@!@!@!@!@!','utf-8')
     sb = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sb.connect(("8.8.8.8", 80))
     ip = str(sb.getsockname()[0])
     sb.close()
-    target = input("IP: ")
+    if not ip:
+        target = input("IP: ")
+    else:
+        target = ip
     port=5000
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((target, port))
