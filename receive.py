@@ -10,7 +10,7 @@ def receive(path):
     port=5000
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((target, port))
-    s.settimeout(10)
+    s.settimeout(25)
     #amount = s.recv(50).decode("utf-8")
     data = bytes("","utf-8")
     while 1:
