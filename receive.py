@@ -1,5 +1,5 @@
 import socket,os
-def receive(path,ip=None,log=None):
+def receive(path,sip=None,log=None):
     if not log:
         log = print
     SEPERATOR=bytes('&*&*&*&*&*&*&','utf-8')
@@ -8,7 +8,8 @@ def receive(path,ip=None,log=None):
     sb.connect(("8.8.8.8", 80))
     ip = str(sb.getsockname()[0])
     sb.close()
-    if not ip:
+    print(bool(ip),type(ip),ip)
+    if not sip:
         target = input("IP: ")
     else:
         target = ip
