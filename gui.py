@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog,messagebox
 import send as wsend
-import sys
+import sys,os
 import receive as wreceive
 MONOSPACES=("Consolas",11)
 class main(tk.Tk):
@@ -63,18 +63,19 @@ class Send(tk.Frame):
         self.table = tk.Listbox(self,width=70,height=10,font=MONOSPACES,exportselection=False)
         self.table.grid(row=2,column=1,columnspan=4,padx=5,pady=5)
     def send(self):
+        print("send")
         self.table.delete(0,tk.END)
         if self.folder.get()=="Blank":
             messagebox.showwarning("Error","No File Selected...")
             return
-        temp = sys.stdout
-        sys.stdout=self
-        
+        #temp = sys.stdout
+        #sys.stdout=self
+        self.write("Preparaing")
         if os.path.isdir(self.folder.get()):
-            wsend.transfer(self.folder.get(),self.folder.get())
+            wsend.transfer(self.folder.get().replace('\\','/'),self.folder.get().replace('\\','/'),log=self.write)
         else:
-            wsend.transfer(self.folder.get(),os.path.dirname(self.folder.get()))
-        sys.stdout=temp
+            wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'),log=self.write)
+        #sys.stdout=temp
     def choose(self):
         if self.isfile.get()==1:
             file = filedialog.askopenfilename()
@@ -108,11 +109,11 @@ class Receive(tk.Frame):
         if self.ip.get()=="Blank":
             messagebox.showwarning("Error","No File Selected...")
             return
-        temp = sys.stdout
-        sys.stdout=self
+        #temp = sys.stdout
+        #sys.stdout=self
         
-        wreceive.receive(self.folder.get(),ip=self.ip.get())
-        sys.stdout=temp
+        wreceive.receive(self.folder.get().replace('\\','/'),ip=self.ip.get(),log=self.write)
+        #sys.stdout=temp
     def choose(self):
 
             file=filedialog.askdirectory()
