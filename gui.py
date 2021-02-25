@@ -67,14 +67,14 @@ class Send(tk.Frame):
         if self.folder.get()=="Blank":
             messagebox.showwarning("Error","No File Selected...")
             return
-        temp = sys.stdout
-        sys.stdout=self
+        #temp = sys.stdout
+        #sys.stdout=self
         
         if os.path.isdir(self.folder.get()):
-            wsend.transfer(self.folder.get().replace('\\','/'),self.folder.get().replace('\\','/'))
+            wsend.transfer(self.folder.get().replace('\\','/'),self.folder.get().replace('\\','/'),log=self.write)
         else:
-            wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'))
-        sys.stdout=temp
+            wsend.transfer(self.folder.get().replace('\\','/'),os.path.dirname(self.folder.get()).replace('\\','/'),log=self.write)
+        #sys.stdout=temp
     def choose(self):
         if self.isfile.get()==1:
             file = filedialog.askopenfilename()
@@ -108,11 +108,11 @@ class Receive(tk.Frame):
         if not self.ip.get():
             messagebox.showwarning("Error","No File Selected...")
             return
-        temp = sys.stdout
-        sys.stdout=self
+        #temp = sys.stdout
+        #sys.stdout=self
         
-        wreceive.receive(self.folder.get().replace("\\",'/'),ip=self.ip.get())
-        sys.stdout=temp
+        wreceive.receive(self.folder.get().replace("\\",'/'),ip=self.ip.get(),log=self.write)
+        #sys.stdout=temp
     def choose(self):
 
             file=filedialog.askdirectory()
