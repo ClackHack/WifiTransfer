@@ -113,7 +113,7 @@ class Receive(tk.Frame):
         #temp = sys.stdout
         #sys.stdout=self
         
-        wreceive.receive(self.folder.get().replace("\\",'/'),ip=self.sip.get(),log=self.write)
+        wreceive.receive(self.folder.get().replace("\\",'/'),sip=self.ip.get(),log=self.write)
         #sys.stdout=temp
     def choose(self):
 
