@@ -1,6 +1,8 @@
 import socket,os
 
-def transfer(path,base,raw=False):
+def transfer(path,base,raw=False,log=None):
+    if not log:
+        log=print
     SEPERATOR="&*&*&*&*&*&*&"
     SUBSEP="!@!@!@!@!@!@!"
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -9,17 +11,18 @@ def transfer(path,base,raw=False):
     s.close()
     HOST = ip
     PORT=5000
+    log("Gon connect")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
     s.bind((HOST,PORT))
     s.listen(1)
-    print(f"Enter {HOST} on client to initiate transfer")
+    log(f"Enter {HOST} on client to initiate transfer")
     #print(path,base)
     base=base.replace("\\",'/')
     conn,addr=s.accept()
     
     if raw:
-        print("Sending raw text")
+        log("Sending raw text")
         conn.sendall(bytes("AMOUNT"+str(1),"utf-8"))
         conn.sendall(bytes(SEPERATOR+"FILES:RAW","utf-8"))
         conn.sendall(bytes(SEPERATOR+"DATA:"+path,"utf-8"))
@@ -45,11 +48,11 @@ def transfer(path,base,raw=False):
             #send(i,conn,base)
     #elif os.path.exists(full):
     else:
-        print("Sending File")
+        log("Sending File")
         conn.sendall(bytes("AMOUNT"+str(1),"utf-8"))
         conn.sendall(bytes(SEPERATOR+"FILES:"+path,"utf-8"))
         conn.sendall(bytes(SEPERATOR+"DATA:","utf-8")+open(full,"rb").read())
         #send(i,conn,base)
-    print("Successfully sent all files")
+    log("Successfully sent all files")
     '''else:
         print(path,full,os.path.isfile(full))'''
