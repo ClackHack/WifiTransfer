@@ -15,7 +15,10 @@ def main():
         else:
             transfer(args[1],path)
     else:
-        print("Received too many or too few arguments...")
+        if args[1].lower()=="raw":
+            transfer(" ".join(args[2:]),path,raw=True)
+        else:
+            print("Received too many or too few arguments...")
     #input("Press 'Enter' to exit...\n")
 
 if __name__=="__main__":

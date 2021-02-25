@@ -27,14 +27,14 @@ def transfer(path,base,raw=False):
         return
     full=os.path.join(base,path).replace("\\","/")
     if os.path.isdir(path):
-        print("Base: ",base)
+        #print("Base: ",base)
         paths = []
         for p,d,f in os.walk(full):
             #print(p,d,f)
-            for ff in f:
-                print(os.path.join(p,ff).replace("\\",'/'))
-                print(os.path.join(p,ff).replace("\\",'/').replace(base,""))
-                print("\n")
+            #for ff in f:
+                #print(os.path.join(p,ff).replace("\\",'/'))
+                #print(os.path.join(p,ff).replace("\\",'/').replace(base,""))
+                #print("\n")
             paths.extend([os.path.join(p,ff).replace("\\",'/') for ff in f])
         print(paths)
         conn.sendall(bytes("AMOUNT:"+str(len(paths)),"utf-8"))
@@ -50,5 +50,6 @@ def transfer(path,base,raw=False):
         conn.sendall(bytes(SEPERATOR+"FILES:"+path,"utf-8"))
         conn.sendall(bytes(SEPERATOR+"DATA:","utf-8")+open(full,"rb").read())
         #send(i,conn,base)
+    print("Successfully sent all files")
     '''else:
         print(path,full,os.path.isfile(full))'''
